@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header">
+</div>
+<a th:href="@{/save_edit}">Save or Edit</a>
+
+<div th:if="${categoryList.size() > 0}">
+    <table>
+        <tr>
+            <th>Category ID</th>
+            <th>Category Name</th>
+            <th>Images</th>
+            <th>Status</th>
+        </tr>
+        <tr th:each="category : ${categoryList}">
+            <th>[[${category.categoryId}}]]</th>
+            <th>[[${category.categoryname}}]]</th>
+            <th><img src="${category.image}"></th>
+            <th>
+                <a th:switch="${category.status}">
+                    <p th:case="0">Lock</p>
+                    <p th:case="1">Unlock</p>
+                </a>
+            </th>
+        </tr>
+    </table>
+</div>
+<div th:replace="fragments/footer :: footer">
+</div>
+
+</body>
+</html>

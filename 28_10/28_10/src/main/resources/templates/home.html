@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header">
+</div>
+
+<form action="/searchpaginated">
+    <input type="text" name="name" id="name" placeholder="Nhập từ khóa để tìm" />
+    <button>Search</button>
+</form>
+
+<div th:if="${!categoryPage.hasContent()}">
+    <a>No Category</a>
+</div>
+
+<div th:if="${categoryPage.hasContent()}">
+    <table>
+        <tr>
+            <th>STT</th>
+            <th>Images</th>
+            <th>Category name</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        <th:block th:each="category, iter : ${categoryPage.content}">
+            <tr>
+                <td>
+                    <p th:text="${iter.index + 1}"></p>
+                </td>
+                <td>
+                    <p th:text="${category.images}"></p>
+                </td>
+                <td>
+                    <p th:text="${category.name}"></p>
+                </td>
+                <td>
+                    <p th:text="${category.status}"></p>
+                </td>
+            </tr>
+        </th:block>
+    </table>
+</div>
+
+
+<div th:replace="fragments/footer :: footer">
+</div>
+
+</body>
+</html>
