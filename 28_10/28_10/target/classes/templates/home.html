@@ -1,37 +1,39 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/_layout">
 <body>
-
-<div th:replace="fragments/header :: header">
-</div>
-<a th:href="@{/save_edit}">Save or Edit</a>
-
-<div th:if="${categoryList.size() > 0}">
+<div layout:fragment="content">
+    <a th:href="@{/function/add}">ADD</a> | <a th:href="@{/pageable}">Pageable</a>
     <table>
         <tr>
-            <th>Category ID</th>
+            <th>STT</th>
             <th>Category Name</th>
-            <th>Images</th>
-            <th>Status</th>
+            <th>Image</th>
+            <th>Action</th>
         </tr>
-        <tr th:each="category : ${categoryList}">
-            <th>[[${category.categoryId}}]]</th>
-            <th>[[${category.categoryname}}]]</th>
-            <th><img src="${category.image}"></th>
-            <th>
-                <a th:switch="${category.status}">
-                    <p th:case="0">Lock</p>
-                    <p th:case="1">Unlock</p>
-                </a>
-            </th>
-        </tr>
+        <th:block th:each="category, stt : ${list}">
+         <tr>
+             <th th:text="${stt.index + 1}"></th>
+             <th th:text="${category.name}"></th>
+             <th>
+                 <!-- Display image if it is a URL -->
+                 <img th:if="${#strings.startsWith(category.image, 'http')}" th:src="${category.image}" width="300" height="200">
+
+                 <!-- Display image from uploads if it is not a URL -->
+                 <img th:unless="${#strings.startsWith(category.image, 'http')}" th:src="@{/../uploads/{image}(image=${category.image})}" width="300" height="200">
+
+             </th>
+             <th th:if="${category.status == 1}" th:text="Active">
+
+             </th>
+             <th>
+                 <a th:href="@{/function/delete(id=${category.id})}">Delete</a> |
+                 <a th:href="@{/function/edit(id=${category.id})}">Edit</a>
+             </th>
+         </tr>
+        </th:block>
     </table>
-</div>
-<div th:replace="fragments/footer :: footer">
 </div>
 
 </body>
